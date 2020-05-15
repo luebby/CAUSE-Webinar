@@ -1,0 +1,253 @@
+---
+title: "Kausale Inferenz"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(ggdag)
+
+coordLV <- list(
+  x = c(Geschlecht = 0, Alter = 0, RaucherIn = 1, Groesse = 2, Lungenvolumen = 3),
+  y = c(Geschlecht = 1, Alter = 2, RaucherIn = 0, Groesse = 2, Lungenvolumen = 0))
+
+dagLV <- dagify(Groesse ~ Geschlecht + Alter + RaucherIn,
+                RaucherIn ~ Geschlecht + Alter,
+                Lungenvolumen ~ Groesse + Geschlecht + Alter + RaucherIn,
+                coords = coordLV,
+                exposure = "RaucherIn",
+                outcome = "Lungenvolumen")
+
+
+p1 <- ggdag(dagLV, text_col = "blue", node = FALSE, text_size = 5) + theme_dag_blank()
+
+
+library(learnr)
+library(mosaic)
+load("LV.Rdata")
+
+checker <- function(label, user_code, check_code, envir_result, evaluate_result, ...) {
+  list(message = check_code, correct = TRUE, location = "append")
+}
+tutorial_options(exercise.timelimit = 60, exercise.checker = checker)
+```
+
+## Vorbemerkung
+
+Dieses Tutorial orientiert sich am Projekt [Causal Inference in Introductory Statistics Courses](https://github.com/kfcaby/causalLab) von [LTC Kevin Cummiskey](https://westpoint.edu/mathematical-sciences/profile/kevin_cummiskey). Siehe auch Cummiskey, K., Adams, B,. Pleuss, J.,  Turner, D., Clark, N. \& Watts, K. (2020). *Causal Inference in Introductory Statistics Courses*, Journal of Statistics Education, [https://doi.org/10.1080/10691898.2020.1713936](https://doi.org/10.1080/10691898.2020.1713936).
+
+Datengrundlage ist der Artikel von Kahn, M. (2005). *An exhalent problem for teaching statistics*. Journal of Statistics Education, 13(2), [https://doi.org/10.1080/10691898.2005.11910559](https://doi.org/10.1080/10691898.2005.11910559).
+
+## Rauchen bei Kindern und Jugendlichen
+
+Mittlerweile sind wir ziemlich sicher, dass Rauchen der Gesundheit schadet. Aber das war nicht immer so, und eine naive Datenanalyse kann auch zu einem gegenteiligen Ergebnis kommen.
+
+In einer Reihe von Papern (siehe z.B. [Kahn, 2005](https://doi.org/10.1080/10691898.2005.11910559)) wurde der Frage nachgegangen inwieweit Rauchen das sogenannte *forcierte exspiratorische Volumen* -- eine Kennzahl der Lungenfunktion -- bei Heranwachsenden beeinflusst.
+
+###
+
+
+```{r ethik, echo=FALSE}
+question("Ist hier ein randomisiertes Experiment ethisch vertretbar?",
+  answer("Ja.", message = "Falsch: es können negative Folgen bei den Teilnehmer\\*innen, die im Experiment den Raucher\\*innen zugeordnet werden, befürchtet werden."),
+  answer("Nein.", correct = TRUE, message = "Richtig: negative Konsequenzen sind für die Raucher\\*innen zu erwarten.")
+)
+```
+
+
+###
+
+Der hier verwendete Datensatz `LV` hat folgende Struktur:
+
+```{r str}
+str(LV)
+```
+
+mit den Variablen
+
+- `Alter`: Alter in Jahren
+- `Lungenvolumen`: forcierte exspiratorische Volumen in l
+- `Groesse`: Größe in cm
+- `Geschlecht`: `m` für männlich und `w` für weiblich
+- `RaucherIn`: Hat die Person geraucht? `ja` oder `nein`
+
+Übersicht der ersten Werte:
+
+```{r head}
+head(LV)
+```
+
+
+```{r skalennvieau, echo=FALSE}
+question("Welches Skalenniveau hat die Variable `Lungenvolumen`?",
+  answer("Kategorial - nominal", message = "Falsch: Die Werte können nicht nur unterschieden werden, es gibt auch eine Reihenfolge, Abstände und einen natürlichen Nullpunkt."),
+  answer("Kategorial - ordinal", message = "Falsch: Die Werte können nicht nur unterschieden und in eine Reihenfolge gebracht werden. Es gibt auch natürliche Abstände und einen natürlichen Nullpunkt."), 
+    answer("Numerisch - intervall", message = "Falsch: Die Werte können nicht nur unterschieden und in eine Reihenfolge mit natürlichen Abständen gebracht werden. Es gibt auch einen natürlichen Nullpunkt."), 
+    answer("Numerisch - verhältnis", correct=TRUE, message = "Richtig: Die Werte können unterschieden werden, es gibt eine natürliche Ordnung. Auch können die Abstände verglichen werden und es gibt einen absoluten Nullpunkt.")
+)
+```
+
+###
+
+Aus inhaltlichen Gründen wird dabei folgender Kausalzusammenhang angenommen:
+
+```{r, echo=FALSE}
+p1
+```
+
+
+## Rauchen und Lungenvolumen
+
+Ein Boxplot des Lungenvolumens in Abhängigkeit des Rauchverhaltens ergibt folgendes Ergebnis:
+
+```{r b1}
+gf_boxplot(Lungenvolumen ~ RaucherIn, data = LV)
+```
+
+###
+
+```{r median, echo=FALSE}
+question("Welche Gruppe hat im Median das größere Lungenvolumen?",
+  answer("Die Nichtraucher.", message = "Falsch: während der Median bei den Nichtraucher\\*innen bei ca. 2.5 l liegt, liegt er bei den Raucher\\*innen bei ca. 3.2 l."),
+  answer("Die Raucher.", correct = TRUE, message = "Richtig: während der Median bei den Nichtraucher\\*innen bei ca. 2.5 l liegt, liegt er bei den Raucher\\*innen bei ca. 3.2 l.")
+)
+```
+
+###
+
+Sowohl Rauchen als auch Lungenvolumen hängen vom Geschlecht ab. 
+
+Erweitern Sie den Code, so dass Sie nach `Geschlecht` bedingen/ filtern.
+
+```{r bedingt, exercise = TRUE}
+gf_boxplot(Lungenvolumen ~ RaucherIn, data = LV)
+```
+
+```{r bedingt-solution}
+gf_boxplot(Lungenvolumen ~ RaucherIn | Geschlecht, data = LV)
+```
+
+###
+
+Das Bild hat sich nicht geändert, Raucher\*innen scheinen das größere Lungenvolumen zu haben.
+
+###
+
+Woran könnte das liegen?
+
+## Das Alter ...
+
+Wie zu erwarten war, gibt es einen Zusammenhang zwischen Alter und Größe:
+
+```{r }
+gf_point(Groesse ~ Alter, data = LV) %>%
+  gf_smooth()
+```
+
+###
+
+Erweitern Sie den Code so, so dass Sie die Punkte gemäß der Variable `RaucherIn` farbig markieren:
+
+```{r color, exercise = TRUE}
+gf_point(Groesse ~ Alter, data = LV) %>%
+  gf_smooth()
+```
+
+```{r color-solution}
+gf_point(Groesse ~ Alter, color = ~ RaucherIn, data = LV) %>%
+  gf_smooth()
+```
+
+###
+
+Klar: Bei Heranwachsenden sind die Raucher\*innen älter als die Nichtraucher\*innen -- und damit auch größer.
+
+###
+
+Und natürlich gibt es auch einen Zusammenhang zwischen der Größe und dem Lungenvolumen:
+
+```{r}
+gf_point(Lungenvolumen ~ Groesse, data = LV) %>%
+  gf_smooth()
+```
+
+## Kausale Modellierung Rauchen und Lungenvolumen 
+
+Hier noch einmal das angenommene Modell:
+
+```{r p12, echo=FALSE}
+p1
+```
+
+
+
+Eine naive Modellierung ergibt folgendes Ergebnis:
+
+```{r}
+lm(Lungenvolumen ~ RaucherIn, data = LV) %>%
+  summary()
+```
+
+### 
+
+Rauchen *scheint* das Lungenvolumen zu erhöhen.
+
+Warum?
+
+###
+
+Weil die nicht-kausalen Pfade durch die *Hintertür* (engl. backdoor, *Fork*) offen sind:
+
+$$\text{RaucherIn} \leftarrow \text{Geschlecht} \rightarrow \text{Lungenvolumen}$$
+bzw.
+
+$$\text{RaucherIn} \leftarrow \text{Alter} \rightarrow \text{Lungenvolumen}$$
+Diese Pfade sollten also z.B. durch Adjustierung *blockiert* werden.
+
+
+```{r chain, echo=FALSE}
+question("Sollte über die Variable `Groesse` adjustiert werden?",
+  answer("Ja.", message = "Falsch: die Variable `Groesse` liegt auf dem kausalen Pfad (*Chain*) zwischen `RaucherIn` und `Lungenvolumen` (Mediator)"),
+  answer("Nein.", correct = TRUE, message = "Richtig: die Variable `Groesse` liegt auf dem kausalen Pfad (*Chain*) zwischen `RaucherIn` und `Lungenvolumen` (Mediator).")
+)
+```
+
+###
+
+Geben Sie, unter der Annahme eines linearen Modells die Formel an, die den (totalen) kausalen Effekt des Rauchens auf das Lungenvolumen schätzt:
+
+```{r model, exercise = TRUE, eval=FALSE}
+lm(Lungenvolumen ~ RaucherIn + ___ + ___, data = LV) %>%
+  summary()
+```
+
+```{r model-solution}
+lm(Lungenvolumen ~ RaucherIn + Geschlecht + Alter, data = LV) %>%
+  summary()
+```
+
+###
+
+```{r effekt, echo=FALSE}
+question("Hat in dem Modell Rauchen einen negativen Effekt auf das Lungenvolumen?",
+  answer("Ja.", correct = TRUE, message = "Richtig: der geschätzte Koeffizient ist mit $-0.153974$ negativ (`Estimate` für die Variable `RaucherInja `)."),
+  answer("Nein.", message = "Falsch: der geschätzte Koeffizient ist mit $-0.153974$ negativ (`Estimate` für die Variable `RaucherInja `).")
+)
+```
+
+###
+
+```{r pwert, echo=FALSE}
+question("Wäre der geschätzte Effekt von ($\\hat{\\beta}_{\\text{RaucherInja}}=-0.153974$) plausibel, wenn es gar keinen geben würde ($H_0: {\\beta}_{\\text{RaucherInja}}=0$)?",
+  answer("Ja.", message = "Falsch: nicht besonders: die Wahrscheinlichkeit in dem Modell ${\\beta}_{\\text{RaucherInja}}=0$ einen mindestens so großen Wert wie $\\hat{\\beta}_{\\text{RaucherInja}}=-0.153974$ in einer Stichprobe zu beobachten liegt bei 0.0487 (p-Wert, siehe `Pr(>|t|)`."),
+  answer("Nein.", correct = TRUE, message = "Richtig: die Wahrscheinlichkeit in dem Modell ${\\beta}_{\\text{RaucherInja}}=0$ einen mindestens so großen Wert wie $\\hat{\\beta}_{\\text{RaucherInja}}=-0.153974$ in einer Stichprobe zu beobachten liegt bei 0.0487 (p-Wert, siehe `Pr(>|t|)`.")
+)
+```
+
+*Hinweis*: Die Annahme eines linearen Modells ist aufgrund des nicht-linearen Zusammenhangs zwischen Alter und Größe sowie Größe und Lungenvolumen (siehe Abbildungen im Abschnitt *Das Alter ...*) eher nur eine Näherung.
+
+## Ausblick
+
+Die Kausale Inferenz bietet viele weitere und fortgeschrittene Möglichkeiten der Analyse. Siehe z.B. als Einstieg: Pearl, J., Glymour, M., \& Jewell, N. P. (2016). *Causal inference in statistics: A primer*. John Wiley \& Sons, [http://bayes.cs.ucla.edu/PRIMER/](http://bayes.cs.ucla.edu/PRIMER/).

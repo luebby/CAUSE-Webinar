@@ -10,9 +10,9 @@ This Repo includes:
 
 - Slides of the Webinar
 
-- Workshop Slides that maybe used for classroom usage
+- Workshop Slides that maybe used in class: `Workshop_Causality.Rmd`
 
-- Source code of a learnr tutorial
+- Source code of a learnr tutorial: `KausaleInferenz.Rmd` (currently in German)
 
 ## Licence
 
