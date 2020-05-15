@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data Literacy Education</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Karsten Lübke" />
+    <script src="libs/header-attrs-2.1/header-attrs.js"></script>
+    <link href="libs/font-awesome-5.3.1/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="footer-header.css" type="text/css" />
+    <link rel="stylesheet" href="xafom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, right, title-slide
+
+# Data Literacy Education
+### Karsten Lübke
+### Causal Inference
+
+---
+
+
+
+layout: true
+  
+&lt;div class="my-header"&gt;&lt;/div&gt;
+
+&lt;!-- the following lines define the header and the footer line: --&gt;
+&lt;div class="my-footer"&gt;&lt;span&gt;Causal Inference    
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;
+Karsten Lübke | Data Literacy &lt;/span&gt;&lt;/div&gt; 
+
+&lt;div class="footer-line"&gt;&lt;/div&gt;
+
+
+
+
+
+
+---
+
+class: center, inverse, middle
+
+## [EDC Oceans of Data Institute:](http://oceansofdata.org/sites/oceansofdata.org/files/ODI%20Data%20Literacy%20Report_0.pdf) The data-literate individual understands,  explains, and documents the utility and  limitations of data by becoming a critical consumer of data, controlling his/her personal data trail, finding meaning in data, and taking action based on data. The data-literate individual can identify, collect, evaluate, analyze, interpret, present, and protect data.
+
+
+
+---
+
+## What you may learn - or already know?
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-1-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+To take the best action or causal conclusion based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and bias can be serious issues for causal inference.
+
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
+
+- Quantitative model checks may not reveal which model is best for causal inference.
+
+- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+--
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-2-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Causal effect, potential outcomes and counterfactuals
+
+Let `\(X_i\)` be `\(1\)` if someone attends this workshop and else `\(0\)`. Also let `\(Y_i\)` be the somehow operationalized knowledge about causal inference:
+
+- `\(Y_i^{|X_i=1}\)`: knowledge if attending (treatment group).
+
+- `\(Y_i^{|X_i=0}\)` knowledge if not attending (control group).
+
+Be precise: What is the causal effect of attending?
+
+--
+
+E.g. Neyman–Rubin causal model:
+
+`$$\Delta_i = Y_i^{|X_i=1} -  Y_i^{|X_i=0}$$` 
+
+
+But: For each `\(i\)` we (usually) can only observe one of the **potential outcomes**. For *you* being here we can only observe `\(y_i^{|x_i=1}\)`. For  *you* `\(y_i^{|x_i=0}\)` is the unobserved **counterfactual** outcome.
+
+Also: There may be **confounding** covariates which may effect `\(X\)` and `\(Y\)` like e.g. `\(C\)`: cleverness. Therefore a naive analysis of e.g. `\(\bar{\delta}\)` can be **biased**.
+
+In randomized controlled trials allocation of `\(i\)` to either `\(x_i\)` being `\(0\)` or `\(1\)` is randomized. With this one hopes to balance the distribution of the covariates between treatment and control group.
+
+
+---
+
+class: center, inverse, middle
+
+# First Example: Bedrooms and house price
+
+
+---
+
+## Saratoga Houses
+
+Data on houses in Saratoga County, New York, USA in 2006. Analysis in `R`:
+
+
+```r
+# Load package and read in data 
+library(mosaic); data(SaratogaHouses)
+# Scatterplot
+gf_point(price ~ bedrooms, data = SaratogaHouses) %&gt;%
+  gf_lm(interval = "prediction")
+```
+
+&lt;img src="Workshop_Causality_files/figure-html/SaratogaSP-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+
+.small[Idea: [De Veaux (2019). *Data Science for All*](https://iase-web.org/conference/satellite19/docs/Data%20Science%20for%20All.pdf)]
+
+
+---
+
+## Modelling value of my 2-bedroom house
+
+Linear Model: `\({\text{price}}_i = {\beta}_0 + {\beta}_{\text{bedrooms}} \times \text{bedrooms}_i + \epsilon_i\)`:
+
+
+```r
+# Linear Regression
+my.model &lt;- lm(price ~ bedrooms, data = SaratogaHouses); my.model 
+```
+
+```
+## 
+## Call:
+## lm(formula = price ~ bedrooms, data = SaratogaHouses)
+## 
+## Coefficients:
+## (Intercept)     bedrooms  
+##       59863        48218
+```
+
+So: `\(\hat{\beta}_{\text{bedrooms}}=48217.81\)`
+
+--
+
+
+```r
+# My house: 2 bedrooms; Point prediction
+My.House &lt;- data.frame(bedrooms = 2); predict(my.model, newdata = My.House)
+```
+
+```
+##        1 
+## 156298.6
+```
+
+`$$\widehat{\text{price}}^{|\text{bedrooms}=2} \approx 156299$$`
+
+
+---
+
+## Turn data into money
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-5-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+Split one bedroom into three!
+
+--
+
+
+```r
+# My rebuilt house: now 4 bedrooms
+My.NewHouse &lt;- data.frame(bedrooms = 4)
+# My money (?)
+predict(my.model, newdata = My.NewHouse) - predict(my.model, newdata = My.House)
+```
+
+```
+##        1 
+## 96435.62
+```
+
+So:
+
+`$$\widehat{\text{price}}^{|\text{bedrooms}=4} - \widehat{\text{price}}^{|\text{bedrooms}=2} = (4-2) \times \hat{\beta}_{\text{bedrooms}}=96435.62$$`
+
+---
+
+## Really?
+
+Make three bedrooms out of one and the value of my house goes up by `\(\approx 100.000\)` Dollar?
+
+--
+
+.center[&lt;iframe src="https://giphy.com/embed/xTiTnHXbRoaZ1B1Mo8" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;]
+
+.small[[via GIPHY](https://giphy.com/gifs/debate-donald-trump-septgopdebate2015-xTiTnHXbRoaZ1B1Mo8)]
+
+
+---
+
+## Causal Model
+
+The number of bedrooms depends on the house size - as well as the price (**confounding**/ **lurking** variable):
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-7-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Omitted-variable bias
+
+Ok, let's **adjust** for `livingArea`:
+
+
+```r
+my.adj.model &lt;- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj.model
+```
+
+```
+## 
+## Call:
+## lm(formula = price ~ bedrooms + livingArea, data = SaratogaHouses)
+## 
+## Coefficients:
+## (Intercept)     bedrooms   livingArea  
+##     36667.9     -14196.8        125.4
+```
+
+Now: `\(\hat{\beta}_{\text{bedrooms}}=-14196.77\)` (instead of `\(\hat{\beta}_{\text{bedrooms}}=48217.81\)` unadjusted for ` livingArea`). So: price falls instead of rises if I split a bedroom. (**Simpson's Paradox**)
+
+
+&lt;br&gt;
+
+--
+
+*Hey, can't I just use e.g. `xgboost` with all variables?*
+
+
+---
+
+## Fancy machine learning method
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-9-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+.center[*Hey, can't I just use e.g. `xgboost` with all variables?*]
+
+.small[BTW: `mlr3`: A modern object-oriented machine learning framework in `R` ([Lang et al., 2019](https://joss.theoj.org/papers/10.21105/joss.01903))]
+
+--
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-10-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
+
+.small[BTW: Nice blog: [Landesberg, Davies and Yee (2019). *Want to make good business decisions? Learn causality*](https://multithreaded.stitchfix.com/blog/2019/12/19/good-marketing-decisions/)]
+
+
+---
+
+## Try yourself! Gender pay gap
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-11-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+&lt;br&gt;
+
+Try to model the gender pay gap: [http://dagitty.net/dags.html](http://dagitty.net/dags.html)
+
+- New graph: `Model -&gt; New Model`
+
+- To add variable: Click on canvas
+
+- To add arrow: Click on cause variable, than click on effect variable
+
+&lt;br&gt;
+
+.small[Of course you can also draw your causal diagram on a piece of paper!]
+
+
+---
+
+class: center, inverse, middle
+
+# Some more words about data science
+
+
+---
+
+## Data science tasks
+
+.center[&lt;iframe src="https://giphy.com/embed/A06UFEx8jxEwU" width="240" height="177" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;]
+
+.small[[via GIPHY](https://giphy.com/gifs/code-matrix-wallpaper-A06UFEx8jxEwU)]
+
+
+-  [Shmueli (2010)](https://projecteuclid.org/euclid.ss/1294167961) asked: *To Explain or to Predict?*
+
+-  [Hernán et al. (2019)](https://doi.org/10.1080/09332480.2019.1579578) distinguished:
+   - **Description**: "How can women aged 60–80 years with stroke history be partitioned in classes defined by their characteristics?"
+   - **Prediction**: "What is the probability of having a stroke next year for women with certain characteristics?"
+   - **Causal inference**: 	"Will starting a statin reduce, on average, the risk of stroke in women with certain characteristics?"
+
+
+
+---
+
+## Common pitfalls
+
+[Smith and Cordes (2019). *The 9 Pitfalls of Data Science*](https://global.oup.com/academic/product/the-9-pitfalls-of-data-science-9780198844396):
+
+1.  Using Bad Data
+
+2.  Putting Data Before Theory
+
+3.  Worshipping Math
+
+4.  Worshipping Computers
+
+5.  Torturing Data
+
+6.  Fooling Yourself
+
+7.  Confusing Correlation with Causation
+
+8.  Being Surprised by Regression Toward the Mean
+
+9.  Doing Harm
+
+
+---
+
+## Data clown (?)
+
+.center[&lt;iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/uHGlCi9jOWY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;]
+
+&gt; But it's a shallow journey if ONLY the machine's learning
+
+
+---
+
+## Causal inference
+
+.center[Are you ready for causal inference?]
+
+&lt;br&gt;
+
+
+.center[&lt;iframe src="https://giphy.com/embed/udhR8Hh1YVM6Q" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;]
+
+.small[[via GIPHY](https://giphy.com/gifs/pill-udhR8Hh1YVM6Q)]
+
+
+---
+
+## Levels of causal inference
+
+
+[Pearl (2019)](https://doi.org/10.1145/3241036) establishes a three-level hierarchy:
+
+- **Association**: `\(P(y|x)\)`: Seeing: *what is?*, i.e., the probability of `\(Y=y\)` given that we observe `\(X=x\)`.
+
+- **Intervention**: `\(P(y|do(x))\)`: Manipulation: *what if?*, i.e., the probability of `\(Y=y\)` given that we intervene and set the value of `\(X\)` to `\(x\)`.
+
+- **Counterfactuals**: `\(P(y_x|x',y')\)`: Imagining: *what if I had acted differently?*, i.e., the probability of `\(Y=y\)` if `\(X\)` had been `\(x\)` given that we actually observed `\(x',y'\)`.
+
+--
+
+[Witmer (2020)](https://doi.org/10.1080/00029890.2020.1671757):
+
+&gt; The  scientific  community  would  benefit  greatly  from  a  better  understanding of causal inference - and "better" is quite a low bar, given how little the tools of causal reasoning have been used over the years. But statisticians have stood in the way, insisting that cause-and-effect conclusions can only be drawn from randomized experiments and delighting in telling stories about confounded effects that arise when analyzing observational data, all while repeating the  mantra  that correlation is  not  causation. In so doing, we statisticians congratulate ourselves too much, while turning students away from asking and answering questions of genuine interest. At the same time, we hamper the advancement of scientific and societal progress.
+
+---
+
+## One page of theory
+
+- `\(X \rightarrow Y: \quad Y=f(X, U_Y)\)` with some function `\(f(\cdot)\)` and some exogenous `\(U\)`. 
+
+- The value of `\(Y\)` depends on `\(X\)` - but the value of `\(X\)` **not** on `\(Y\)`. 
+
+- Causally there is no inverse function `\(f^{-1}(\cdot)\)`. My weight growths with my height but unfortunately my height not with my weight.
+
+&lt;br&gt;
+
+
+
+| Path                       | `\(X \rightarrow C \rightarrow Y\)` | `\(X \leftarrow C \rightarrow Y\)` | `\(X \rightarrow C \leftarrow Y\)` 
+| ---------------------------|---------------------------------|--------------------------------|------------------------------|
+| Name                       | Chain                           | Fork                           | Collider         
+| Association `\(X\)` to `\(Y\)`     | Causal                          | Non-causal                     | None                       
+| Adjusting `\(C\)`              | Blocks causal path              | Blocks non-causal path         | Opens non-causal path
+
+&lt;br&gt;
+
+**Idea**: To estimate the change in `\(y\)` if `\(x\)` is changed: Block non-causal paths, open causal paths and don't open a biasing path.
+
+
+---
+
+## Conditional and unconditional independence
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-12-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+**Example**: sunscreen  `\(\leftarrow\)` sunshine  `\(\rightarrow\)` ice cream 
+
+  - Knowing sunscreen I learn via sunshine something about ice cream. Unconditionally, i.e. marginal, they are not independent. Formally: `\(X \not\!\perp\!\!\!\perp Y\)`
+  
+  - Knowing sunshine I don't learn more about ice cream by sunscreen. Conditionally on sunshine they are independent. Formally: `\(X{\perp\!\!\!\perp}Y|C\)`
+
+
+---
+
+## More on conditional and unconditional independence
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-13-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+**Example**: weekend  `\(\rightarrow\)` sleep  `\(\leftarrow\)` holiday
+
+  - Knowing that it is weekend I learn nothing about whether it is holiday or not: Unconditionally, i.e. marginal, they are independent. Formally: `\(X{\perp\!\!\!\perp}Y\)`
+  
+  - Knowing that I can sleep late and that it is not weekend I learn that it must be holiday: Conditionally on sleep they are not independent. Formally: `\(X \not\!\perp\!\!\!\perp Y|C\)`
+  
+
+---
+
+## More on Chains, forks and colliders and graphs
+
+Role of `\(C\)`:
+
+- `\(X \rightarrow C \rightarrow Y\)`: `\(C\)` is a mediator between `\(X\)` and `\(Y\)`.
+
+- `\(X \leftarrow C \rightarrow Y\)`: `\(C\)` is a common cause of `\(X\)` and `\(Y\)`.
+
+- `\(X \rightarrow C \leftarrow Y\)` : `\(C\)` is a common effect of `\(X\)` and `\(Y\)`.
+
+&lt;br&gt;
+
+Elements of a graph:
+
+- All variables with an arrow into `\(Z\)` are called parents of `\(Z\)`.
+
+- All variables with an arrow from `\(Z\)` are called children of `\(Z\)`.
+
+- No arrow between two variables indicate that there is no direct association between them. 
+
+
+
+---
+
+## Try yourself! Causal effect in gender pay gap
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-14-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+.center[Assumed model of gender pay gap]
+
+&lt;img src="img/GPG.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+.small[Made with [DAGitty](http://dagitty.net/)]
+
+Discuss what this model implies for estimating causal effects.
+
+
+---
+
+## Try yourself! Your data science question
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-16-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+Draw a simple causal diagram for a research question of your choice. What does this model imply?
+
+&lt;br&gt;
+
+[http://dagitty.net/dags.html](http://dagitty.net/dags.html) or a piece of paper.
+
+&lt;br&gt;
+
+.grey[E.g.: Test score and relation to learning time and intelligence.]
+
+&lt;br&gt;
+
+**Note**: Nodes (i.e. variables - observable and not-observable), arrows (i.e. dependencies) and omitted arrows (i.e. independencies) must be founded by theory!
+
+---
+
+class: center, inverse, middle
+
+# A first simulated example
+
+
+---
+
+## Data generating process
+
+.pull-left[
+$$ X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
+`$$Y = X +  U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$`
+`$$Z = Y + U_Z, \quad U_Z \sim \mathcal{N}(0,\,0.1).$$`
+where `\(\mathcal{N}(\mu,\,\sigma)\)` stands for normal distribution with mean `\(\mu\)` and variance `\(\sigma^2\)`.
+]
+
+.pull-right[
+In `R`:
+
+
+```r
+set.seed(1896)
+x &lt;- rnorm(100, mean = 0, sd = 1)
+y &lt;- x + rnorm(100, mean = 0, sd = 1)
+z &lt;- y + rnorm(100, mean = 0, sd = 0.1)
+```
+
+
+]
+
+So **causally**: 
+
+&lt;br&gt;
+
+`$$X \rightarrow Y \rightarrow Z$$`
+
+**Note**: The outcome `\(Y\)` is in the middle of the chain - not at the end.
+
+&lt;br&gt;
+
+.small[Idea: [https://fabiandablander.com/r/Causal-Inference](https://fabiandablander.com/r/Causal-Inference)]
+
+---
+
+## Modelling
+
+.center[Modelling of `\(y\)` by `\(x\)` or `\(z\)`]
+
+.pull-left[
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-19-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-20-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+## Marginal and conditional distributions (association)
+
+.center[Marginal, i.e. unconditional, distribution of `\(y\)`]
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-21-1.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+
+.pull-left[
+Conditional distribution of `\(y\)`, **observing** `\(x=2\)`
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-22-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Conditional distribution of `\(y\)`, **observing** `\(z=2\)`
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-23-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+
+---
+
+## Conditional distributions (intervention)
+
+.pull-left[
+Conditional distribution of `\(y\)`, **setting** `\(do(x)=2\)`
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-24-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+Conditional distribution of `\(y\)`, **setting** `\(do(z)=2\)`
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-25-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+&lt;br&gt;
+
+.center[*Sex is not love - and association is not causation*]
+
+&lt;br&gt; 
+
+--
+
+-  In associational setting: `\(z\)` is better for predicting `\(y\)`.
+
+-  In interventional setting: `\(x\)` is better for predicting `\(y\)`.
+
+--
+
+**How should we know this without causal assumptions?**
+
+
+---
+
+class: center, inverse, middle
+
+# A second simulated example
+
+
+---
+
+## Dating
+
+**Assume** you date someone because he is good looking or because he is kind. Moreover assume that looking and kindness are independent.
+
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-26-1.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Data generating process
+
+`$$X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$`
+`$$Y = U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$`
+`$$\widetilde{C} =\begin{cases} 1 &amp; ,\, \text{if } \{ X &gt; 1 \,\vee\, Y &gt; 1\} \\ 0 &amp; ,\, \text{else } \end{cases},$$`
+`$$C = (1-U_C) \cdot \widetilde{C} + U_C \cdot (1- \widetilde{C}), \quad U_C \sim \mathcal{B}(0.05).$$`
+where `\(\mathcal{B}(\pi)\)` stands for the Bernoulli distribution.
+
+In `R`:
+
+
+```r
+set.seed(1896)
+
+kind&lt;- rnorm(1000)
+look &lt;- rnorm(1000)
+dating &lt;- ((kind &gt; 1) | (look &gt; 1)) 
+luck &lt;- rbinom(1000, size = 1, prob = 0.05)
+dating &lt;- (1 - luck) * dating + luck * (1 - dating)
+```
+
+
+
+
+---
+
+## Modelling: Marginal
+
+Modelling of `kind` by `look`:
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-29-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Modelling: Conditional
+
+Modelling of `kind` by `look`, adjusted for `dating`:
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-30-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness (**Berkson's Paradox**).
+
+
+
+
+---
+
+## Selection/ Collider Bias
+
+Modelling of `kind` by `look`, selected by `dating`:
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-31-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated.
+
+---
+
+class: center, inverse, middle
+
+# Second Example: Smoking and lung function
+
+---
+
+## Try yourself! learnr tutorial 
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-32-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+&lt;br&gt;
+
+`learnr` Tutorial with real data (in German): [https://fomshinyapps.shinyapps.io/KausaleInferenz/](https://fomshinyapps.shinyapps.io/KausaleInferenz/)
+
+Associated RStudio Cloud project: [https://rstudio.cloud/project/876677](https://rstudio.cloud/project/876677)
+
+
+---
+
+class: center, inverse, middle
+
+# Take home messages
+
+
+---
+
+## First of all
+
+Remember: 
+
+.center[**Data (and models thereof) are not the reality!**]
+
+.center[&lt;iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;]
+
+.small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
+
+
+So: Always take your anti-hubristines! 
+
+
+---
+
+## Other lessons learned - hopefully
+
+&lt;img src="Workshop_Causality_files/figure-html/unnamed-chunk-33-1.png" width="15%" style="display: block; margin: auto;" /&gt;
+
+To take the best action or causal conclusion based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and bias can be serious issues for causal inference.
+
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
+
+- Quantitative model checks may not reveal which model is best for causal inference.
+
+- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+
+---
+
+## Want more?
+
+Some References:
+
+- [Dablander, F. (2019). An introduction to Causal inference (Blog)](https://fabiandablander.com/r/Causal-Inference)
+
+- [Rohrer, J.M. (2018). Thinking Clearly About Correlations and Causation: Graphical Causal Models for Observational Data. Advances in Methods and Practices in Psychological Science, 1(1), 27–42.](https://doi.org/10.1177/2515245917745629)
+    
+- [Elwert, F. (2013). Graphical causal models. In: Handbook of causal analysis for social research (S. 245-273). Springer, Dordrecht.](https://www.researchgate.net/publication/278717528_Graphical_Causal_Models)
+    
+- [Pearl, J., Glymour, M., &amp; Jewell, N. P. (2016). Causal inference in statistics: A primer. John Wiley &amp; Sons.](http://bayes.cs.ucla.edu/PRIMER/)
+    
+- [Peters, J., Janzing, D., &amp; Schölkopf, B. (2017). Elements of causal inference: foundations and learning algorithms. MIT press.](https://mitpress.mit.edu/books/elements-causal-inference)
+
+&lt;br&gt; 
+
+Also:
+
+Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
+
+.small[Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ...]
+
+
+---
+
+## Own Work and contact
+
+
+- [Lübke, K., Gehrke, M., Horst, J. &amp; Szepannek, G. (2020). Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data, Journal of Statistics Education.](https://doi.org/10.1080/10691898.2020.1752859)
+
+- Lübke, K. &amp;  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (accepted).
+
+&lt;br&gt;
+
+**Acknowledgement**:
+
+I thank Matthias Gehrke, Jörg Horst, Sebastian Sauer and Gero Szepannek for their contributions!
+
+&lt;br&gt;
+
+
+- <i class="fas  fa-envelope "></i>: [karsten.luebke@fom.de](&lt;mailto:karsten.luebke@fom.de&gt;)
+- <i class="fab  fa-twitter "></i>: [@luebby42](https://twitter.com/luebby42)
+- <i class="fab  fa-github "></i>: [@luebby](https://github.com/luebby)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "4:3"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+<style>
+.logo {
+  background-image: url(img/logo.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  width: 70px;
+  height: 70px;  
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    ':not(.inverse)' + 
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
