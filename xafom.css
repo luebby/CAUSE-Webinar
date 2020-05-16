@@ -149,7 +149,8 @@ ul li:before {
 
 .title-slide, .title-slide h1 {
   color: #00998A;
-  margin-top: +300px;
+  margin-top: +100px;
+  line-height: 1.5em;
 }
 
 
@@ -160,6 +161,7 @@ ul li:before {
 
 .title-slide, .title-slide h3 {
   color: #5E6974;
+  line-height: 1em;
 }
 
 .title-slide {

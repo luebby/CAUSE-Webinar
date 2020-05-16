@@ -82,7 +82,7 @@ options(scipen=999)
 
 class: center, inverse, middle
 
-## [EDC Oceans of Data Institute:](http://oceansofdata.org/sites/oceansofdata.org/files/ODI%20Data%20Literacy%20Report_0.pdf) The data-literate individual understands,  explains, and documents the utility and  limitations of data by becoming a critical consumer of data, controlling his/her personal data trail, finding meaning in data, and taking action based on data. The data-literate individual can identify, collect, evaluate, analyze, interpret, present, and protect data.
+## [EDC Oceans of Data Institute (2016):](http://oceansofdata.org/sites/oceansofdata.org/files/ODI%20Data%20Literacy%20Report_0.pdf) The data-literate individual understands,  explains, and documents the utility and  limitations of data by becoming a critical consumer of data, controlling his/her personal data trail, finding meaning in data, and taking action based on data. The data-literate individual can identify, collect, evaluate, analyze, interpret, present, and protect data.
 
 
 
@@ -384,12 +384,6 @@ class: center, inverse, middle
 - **Intervention**: $P(y|do(x))$: Manipulation: *what if?*, i.e., the probability of $Y=y$ given that we intervene and set the value of $X$ to $x$.
 
 - **Counterfactuals**: $P(y_x|x',y')$: Imagining: *what if I had acted differently?*, i.e., the probability of $Y=y$ if $X$ had been $x$ given that we actually observed $x',y'$.
-
---
-
-[Witmer (2020)](https://doi.org/10.1080/00029890.2020.1671757):
-
-> The  scientific  community  would  benefit  greatly  from  a  better  understanding of causal inference - and "better" is quite a low bar, given how little the tools of causal reasoning have been used over the years. But statisticians have stood in the way, insisting that cause-and-effect conclusions can only be drawn from randomized experiments and delighting in telling stories about confounded effects that arise when analyzing observational data, all while repeating the  mantra  that correlation is  not  causation. In so doing, we statisticians congratulate ourselves too much, while turning students away from asking and answering questions of genuine interest. At the same time, we hamper the advancement of scientific and societal progress.
 
 ---
 
