@@ -8,7 +8,7 @@ Based on the paper [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). Wh
 
 This Repo includes:
 
-- Slides of the Webinar
+- Slides of the Webinar: `CAUSE-Slides.Rmd` (Source)
 
 - Workshop Slides that maybe used in class: `Workshop_Causality.Rmd`
 

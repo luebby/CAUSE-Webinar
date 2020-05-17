@@ -194,7 +194,7 @@ Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead
 
 --
 
-*Hey, can't I just use e.g. `xgboost` with all variables?*
+*Hey, can't I just use e.g. `xgboost` with all variables? (And be aware of bias-variance trade off.)*
 
 
 ---
@@ -205,7 +205,7 @@ Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead
 ggplot() + geom_emoji("thinking") + theme_void()
 ```
 
-.center[*Hey, can't I just use e.g. `xgboost` with all variables?*]
+.center[*Hey, can't I just use e.g. `xgboost` with all variables? (And be aware of bias-variance trade off.)*]
 
 .small[BTW: `mlr3`: A modern object-oriented machine learning framework in `R` ([Lang et al., 2019](https://joss.theoj.org/papers/10.21105/joss.01903))]
 
@@ -264,7 +264,6 @@ dating <- (1 - luck) * dating + luck * (1 - dating)
 Date <- data.frame(kind, look, dating=(dating==1))
 ```
 
-
 ---
 
 ## Modelling: Marginal
@@ -304,6 +303,27 @@ ggformula::gf_point(kind~look, data = Dated) %>%
 ```
 
 - There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated.
+
+---
+
+## Excursion: Our looks
+
+This work has contribution of many kind *and* good looking people:
+
+
+Matthias Gehrke, Jörg Horst, Gero Szepannek, Bianca Krol, Sebastian Sauer
+
+.center[
+```{r out.width='15%', fig.show='hold', echo=FALSE}
+knitr::include_graphics(c("img/matthias.jpeg", "img/joerg.png", "img/gero.jpg", "img/bianca.png","img/sebastian.jpg"))
+```
+]
+
+Your presenter being neither:
+
+```{r out.width='15%', echo=FALSE, fig.align='center'}
+knitr::include_graphics(c("img/karsten.png"))
+```
 
 ---
 
@@ -372,6 +392,30 @@ class: center, inverse, middle
 
 ---
 
+## Some lessons you may have known or just learned
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("woman_teacher") + theme_void()
+```
+
+To take the best action or causal conclusion based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and bias can be serious issues for causal inference.
+
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
+
+- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+- Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true neverthelss*).
+
+--
+
+`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)`DAGs may help to develop a framework to think about the data generating process.
+
+---
+
 class: center, inverse, middle
 
 # Teaching Causal Inference
@@ -394,16 +438,16 @@ class: center, inverse, middle
 --
 
 
-Influenced by [GAISE (2016)](https://www.amstat.org/asa/files/pdfs/GAISE/GaiseCollege_Full.pdf)
+Influenced by [GAISE (2016)](https://www.amstat.org/asa/files/pdfs/GAISE/GaiseCollege_Full.pdf), but also [Kaplan (2018)](https://doi.org/10.1080/00031305.2017.1398107) and [Schield (2018)](http://www.statlit.org/pdf/2018-Schield-ICOTS.pdf):
 
 - [Wild and Pfannkuch (1999)](https://doi.org/10.1111/j.1751-5823.1999.tb00442.x). Statistical Thinking in Empirical Enquiry
 - [Lindeløv (2019)](https://lindeloev.github.io/tests-as-linear/). Common statistical tests are linear models (or: how to teach stats)
 - [Pruim, Kaplan and Horton (2017)](https://journal.r-project.org/archive/2017/RJ-2017-024/index.html). The mosaic Package: Helping Students to 'Think with Data' Using R
 - [Rossman and Chance (2014)](https://doi.org/10.1002/wics.1302). Using simulation‐based inference for learning introductory statistics
 
-Together with [Reproducible Analysis](https://escholarship.org/uc/item/90b2f5xh), [Quizzes](https://escholarship.org/uc/item/2503w2np) and [Fun Elements](https://doi.org/10.1080/10691898.2016.1190190).
+Together with [Reproducible Analysis](https://escholarship.org/uc/item/90b2f5xh), [Quizzes](https://escholarship.org/uc/item/2503w2np), [Fun Elements](https://doi.org/10.1080/10691898.2016.1190190), [shiny](https://shiny.rstudio.com/) and [learnr](https://rstudio.github.io/learnr/) apps.
 
-Inspired by [Open Intro (ISRS)](https://www.openintro.org/book/isrs/), [ModernDive](https://moderndive.com/) and [Data 8](http://data8.org/).
+Inspired by e.g. the `r icon::ai("open-access")`-books [Open Intro (ISRS)](https://www.openintro.org/book/isrs/), [ModernDive](https://moderndive.com/), [Statistical Modeling (2e)](https://dtkaplan.github.io/SM2-bookdown/) and [Data 8](http://data8.org/).
 
 --
 
@@ -411,49 +455,53 @@ Inspired by [Open Intro (ISRS)](https://www.openintro.org/book/isrs/), [ModernDi
 ggplot() + geom_emoji("kissing_heart") + theme_void()
 ```
 
+
+---
+
+## [Asking questions](https://askgoodquestions.blog/)
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("thinking") + theme_void()
+```
+
+- Is it a good idea to show oversimplified examples in class? Real causal inference is much more complicated.
+
+- Are we overstraining our students?
+
+- What about the topics ommited: Is causal inference making up the opportunity costs?
+
+- What happens if our students change university and have learned different topics than in a classical curriculum?
+
+- Is it a good idea to teach something that most of us have not learned while being a student?
+
+- On the other hand, are we answering the important questions for data literacy in the consensus curriculum?
+
 ---
 
 
 class: center, inverse, middle
 
-# Take home messages
+# Outro
 
 
 ---
 
-## First of all
+## Remember
 
-Remember: 
 
-.center[**Data (and models thereof) are not the reality!**]
+.center[
 
-.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="480" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
+[Cobb (1992)](http://www.statlit.org/pdf/1992-Steen-MAA-Heeding-Call-For-Change.pdf):
+
+> Shorn of all subtlety and led naked out of the protective fold of educational research literature, there comes a sheepish little fact: lectures do not work nearly as well as many of us would like to think.
+]
+
+.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="440" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
 .small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
 
 
-So: Always take your anti-hubristines! 
-
-
----
-
-## Other lessons learned - hopefully
-
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("woman_teacher") + theme_void()
-```
-
-To take the best action or causal conclusion based on multivariate (observational) data analysis:
-
-- Data is not just there - it has a generating process and we should care about this.
-
-- Confounding and bias can be serious issues for causal inference.
-
-- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
-
-- Quantitative model checks may not reveal which model is best for causal inference.
-
-- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+So: Always take your anti-hubristines! (De Veaux (?))
 
 
 ---
@@ -493,12 +541,17 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 <br>
 
-**Acknowledgement**:
+- `r icon::ai("open-access")`-materials for this webinar: [https://github.com/luebby/CAUSE-Webinar](https://github.com/luebby/CAUSE-Webinar)
 
-I thank Matthias Gehrke, Jörg Horst, Sebastian Sauer and Gero Szepannek for their contributions!
+<br>
 
 - `r icon::fa("envelope")`: [karsten.luebke@fom.de](<mailto:karsten.luebke@fom.de>)
 - `r icon::fa("twitter")`: [@luebby42](https://twitter.com/luebby42)
 - `r icon::fa("github")`: [@luebby](https://github.com/luebby)
 
+<br>
+
+--
+
+.center[.xlarge[Thank you!]]
 
