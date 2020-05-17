@@ -360,9 +360,11 @@ class: center, inverse, middle
 
 - **Counterfactuals**: $P(y_x|x',y')$: Imagining: *what if I had acted differently?*, i.e., the probability of $Y=y$ if $X$ had been $x$ given that we actually observed $x',y'$.
 
+
+
 <br>
 
-.small[Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ...]
+Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ...
 
 ---
 
@@ -389,6 +391,9 @@ class: center, inverse, middle
 <br>
 
 **Idea**: To estimate the change in $y$ if $x$ is changed: Block non-causal paths, open causal paths and don't open a biasing path.
+
+.small[BTW: [DAGitty](http://dagitty.net/) is a browser-based environment for creating, editing, and analyzing causal diagrams.]
+
 
 ---
 
