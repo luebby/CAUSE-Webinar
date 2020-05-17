@@ -408,7 +408,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
 
-- Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true neverthelss*).
+- Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true nevertheless*).
 
 --
 
