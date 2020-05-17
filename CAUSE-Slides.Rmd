@@ -308,7 +308,7 @@ ggformula::gf_point(kind~look, data = Dated) %>%
 
 ## Excursion: Our looks
 
-This work has contribution of many kind *and* good looking people:
+Kind *and* good looking people who contributed to this work:
 
 
 Matthias Gehrke, Jörg Horst, Gero Szepannek, Bianca Krol, Sebastian Sauer
