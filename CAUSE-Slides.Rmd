@@ -392,7 +392,7 @@ Other approaches to causal inference are e.g. within potential outcome framework
 
 **Idea**: To estimate the change in $y$ if $x$ is changed: Block non-causal paths, open causal paths and don't open a biasing path.
 
-.small[BTW: [DAGitty](http://dagitty.net/) is a browser-based environment for creating, editing, and analyzing causal diagrams.]
+.small[BTW: [DAGitty](http://dagitty.net/) is a nice browser-based environment for creating, editing, and analyzing causal diagrams (directed acyclic graphs).]
 
 
 ---
@@ -417,7 +417,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 --
 
-`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)`DAGs may help to develop a framework to think about the data generating process.
+`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)`Directed acyclic graphs may help to develop a framework to think about the data generating process.
 
 ---
 
