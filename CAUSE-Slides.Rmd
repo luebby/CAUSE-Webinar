@@ -464,15 +464,15 @@ ggplot() + geom_emoji("kissing_heart") + theme_void()
 ggplot() + geom_emoji("thinking") + theme_void()
 ```
 
-- Is it a good idea to show oversimplified examples in class? Real causal inference is much more complicated.
+- Is it a good idea to show oversimplified examples in class? Real causal inference is much harder.
 
 - Are we overstraining our students?
 
 - What about the topics ommited: Is causal inference making up the opportunity costs?
 
-- What happens if our students change university and have learned different topics than in a classical curriculum?
+- What happens if our students change university and have learned different topics than in a consensus curriculum?
 
-- Is it a good idea to teach something that most of us have not learned while being a student?
+- Is it a good idea to teach something that most of us have not learned as a student?
 
 - On the other hand, are we answering the important questions for data literacy in the consensus curriculum?
 
@@ -541,7 +541,7 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 <br>
 
-- `r icon::ai("open-access")`-materials for this webinar: [https://github.com/luebby/CAUSE-Webinar](https://github.com/luebby/CAUSE-Webinar)
+- `r icon::ai("open-access")`-material for this webinar: [https://github.com/luebby/CAUSE-Webinar](https://github.com/luebby/CAUSE-Webinar)
 
 <br>
 
