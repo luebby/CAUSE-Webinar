@@ -88,7 +88,7 @@ class: center, inverse, middle
 
 class: center, inverse, middle
 
-# First real data example
+# Real data example
 
 ---
 
@@ -224,7 +224,7 @@ Unfortunately: Depending on task **not always** and quantitative measures like e
 
 class: center, inverse, middle
 
-# A first simulated example
+# Simulated example
 
 ---
 
@@ -473,6 +473,8 @@ ggplot() + geom_emoji("thinking") + theme_void()
 
 - Are we overstraining our students?
 
+- Simulated data, really?
+
 - What about the topics ommited: Is causal inference making up the opportunity costs?
 
 - What happens if our students change university and have learned different topics than in a consensus curriculum?
@@ -555,8 +557,6 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 - `r icon::fa("github")`: [@luebby](https://github.com/luebby)
 
 <br>
-
---
 
 .center[.xlarge[Thank you!]]
 
