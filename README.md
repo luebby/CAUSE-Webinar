@@ -12,7 +12,7 @@ This Repo includes:
 
 - Workshop Slides that maybe used in class: `Workshop_Causality.Rmd`
 
-- Source code of a learnr tutorial: `KausaleInferenz.Rmd` (currently in German)
+- Source code of a learnr tutorial: `KausaleInferenz.Rmd` (currently in German), based on [Causal Inference in Introductory Statistics Courses](https://github.com/kfcaby/causalLab).
 
 ---
 

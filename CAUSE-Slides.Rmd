@@ -65,6 +65,31 @@ DAG_Date <- dagify(C ~ Y,
             hjust = 0.5, vjust = 1,
             x = 1, y = 1, size = 7, color = "darkgrey")
 
+co <- data.frame(x=c(0,0,1), y=c(1,0,0), name=c("C", "X", "Y")) 
+
+DAGE1 <- dagify(Y ~ X,
+       X ~ C,
+       Y ~ C, coords = co) %>% 
+  ggdag(node_size = 20, text_size = 8, text = TRUE, text_col = "lightgray") + theme_dag_blank() +
+  geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(15, "pt"), type = "closed"))  + 
+  geom_text(label = "C - Intelligence\nX - Learning Time\nY - Test Score", 
+            hjust = 1, vjust = 1,
+            x = 1, y = 1, size = 7, color = "darkgrey") +
+  geom_segment(aes(x = -.1, y = .475, xend = .1, yend = .575), color = "darkgrey") +
+  geom_segment(aes(x = -.1, y = .425, xend = .1, yend = .525), color = "darkgrey")
+
+
+co <- data.frame(x=c(0,0,1,-1), y=c(1,0,0,0), name=c("C", "X", "Y", "E")) 
+
+DAGE2 <- dagify(Y ~ X,
+       X ~ E,
+       Y ~ C, coords = co) %>% 
+  ggdag(node_size = 20, text_size = 8, text = TRUE, text_col = "lightgray") + theme_dag_blank() +
+  geom_dag_edges(arrow_directed = grid::arrow(length = grid::unit(15, "pt"), type = "closed"))  + 
+  geom_text(label = "C - Intelligence\nX - Learning Time\nY - Test Score\nE - Experimenter", 
+            hjust = 0, vjust = 1,
+            x = -1.1, y = 0.75, size = 7, color = "darkgrey")
+
 library(mosaic)
 
 theme.fom <- theme_classic(22*1.04)
@@ -168,7 +193,7 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 ---
 
-## Causal Model
+## Causal Model (simplified)
 
 The number of bedrooms depends on the house size - as well as the price (**confounding**/ **lurking** variable):
 
@@ -394,6 +419,23 @@ Other approaches to causal inference are e.g. within potential outcome framework
 
 .small[BTW: [DAGitty](http://dagitty.net/) is a nice browser-based environment for creating, editing, and analyzing causal diagrams (directed acyclic graphs).]
 
+---
+
+## Randomized controlled trial
+
+Within a randomized controlled trial $i$ is randomly assigend to $x_i$: $do(x)$. The connections to the *parents* of $X$ is cut:
+
+.pull-left[
+```{r echo=FALSE, out.width = "80%", fig.align="center"}
+DAGE1
+```
+]
+
+.pull-left[
+```{r echo=FALSE, out.width = "80%", fig.align="center"}
+DAGE2
+```
+]
 
 ---
 
@@ -415,9 +457,9 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true nevertheless*).
 
---
 
 `r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)`Directed acyclic graphs may help to develop a framework to think about the data generating process.
+
 
 ---
 
@@ -448,7 +490,7 @@ Influenced by [GAISE (2016)](https://www.amstat.org/asa/files/pdfs/GAISE/GaiseCo
 - [Wild and Pfannkuch (1999)](https://doi.org/10.1111/j.1751-5823.1999.tb00442.x). Statistical Thinking in Empirical Enquiry
 - [Lindeløv (2019)](https://lindeloev.github.io/tests-as-linear/). Common statistical tests are linear models (or: how to teach stats)
 - [Pruim, Kaplan and Horton (2017)](https://journal.r-project.org/archive/2017/RJ-2017-024/index.html). The mosaic Package: Helping Students to 'Think with Data' Using R
-- [Rossman and Chance (2014)](https://doi.org/10.1002/wics.1302). Using simulation‐based inference for learning introductory statistics
+- [Rossman and Chance (2014)](https://doi.org/10.1002/wics.1302). Using simulation‐based inference for learning introductory statistics (cf. Blog [Downey (2018)](https://allendowney.blogspot.com/2018/06/inference-in-three-hours.html)).
 
 Together with [Reproducible Analysis](https://escholarship.org/uc/item/90b2f5xh), [Quizzes](https://escholarship.org/uc/item/2503w2np), [Fun Elements](https://doi.org/10.1080/10691898.2016.1190190), [shiny](https://shiny.rstudio.com/) and [learnr](https://rstudio.github.io/learnr/) apps.
 
@@ -489,26 +531,6 @@ ggplot() + geom_emoji("thinking") + theme_void()
 class: center, inverse, middle
 
 # Outro
-
-
----
-
-## Remember
-
-
-.center[
-
-[Cobb (1992)](http://www.statlit.org/pdf/1992-Steen-MAA-Heeding-Call-For-Change.pdf):
-
-> Shorn of all subtlety and led naked out of the protective fold of educational research literature, there comes a sheepish little fact: lectures do not work nearly as well as many of us would like to think.
-]
-
-.center[<iframe src="https://giphy.com/embed/MPuTZQqOmYKPK" width="440" height="282" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
-
-.small[[via GIPHY](https://giphy.com/gifs/thegoodfilms-film-the-big-lebowski-dude-MPuTZQqOmYKPK)]
-
-
-So: Always take your anti-hubristines! (De Veaux (?))
 
 
 ---
