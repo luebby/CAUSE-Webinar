@@ -221,6 +221,8 @@ Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead
 
 *Hey, can't I just use e.g. `xgboost` with all variables? (And be aware of bias-variance trade off.)*
 
+.small[BTW: Nice blog: [Landesberg, Davies and Yee (2019). *Want to make good business decisions? Learn causality*](https://multithreaded.stitchfix.com/blog/2019/12/19/good-marketing-decisions/)]
+
 
 ---
 
@@ -234,15 +236,12 @@ ggplot() + geom_emoji("thinking") + theme_void()
 
 .small[BTW: `mlr3`: A modern object-oriented machine learning framework in `R` ([Lang et al., 2019](https://joss.theoj.org/papers/10.21105/joss.01903))]
 
---
 
 ```{r, echo= FALSE , out.width = "15%", fig.align="center"}
 ggplot() + geom_emoji("cry") + theme_void()
 ```
 
 Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
-
-.small[BTW: Nice blog: [Landesberg, Davies and Yee (2019). *Want to make good business decisions? Learn causality*](https://multithreaded.stitchfix.com/blog/2019/12/19/good-marketing-decisions/)]
 
 
 ---
@@ -314,6 +313,7 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
 
 - Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness (**Berkson's Paradox**).
 
+- Formally: $\text{kind}{\perp\!\!\!\perp}\text{look}$ *but* $\text{kind} \not\!\perp\!\!\!\perp \text{look}|\text{dating}$
 
 ---
 
@@ -327,7 +327,7 @@ ggformula::gf_point(kind~look, data = Dated) %>%
   gf_lm() + ggthemes::scale_color_colorblind()
 ```
 
-- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated.
+- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated - if good looking was not the reason it must have been kindness (or luck).
 
 ---
 
@@ -344,7 +344,7 @@ knitr::include_graphics(c("img/matthias.jpeg", "img/joerg.png", "img/gero.jpg", 
 ```
 ]
 
-Your presenter being neither:
+Your presenter:
 
 ```{r out.width='15%', echo=FALSE, fig.align='center'}
 knitr::include_graphics(c("img/karsten.png"))
@@ -423,7 +423,7 @@ Other approaches to causal inference are e.g. within potential outcome framework
 
 ## Randomized controlled trial
 
-Within a randomized controlled trial $i$ is randomly assigend to $x_i$: $do(x)$. The connections to the *parents* of $X$ is cut:
+Within a randomized controlled trial observation $i$ is randomly assigend to $x_i$: $do(x_i)$. The connections to the *parents* of $X$ is cut:
 
 .pull-left[
 ```{r echo=FALSE, out.width = "80%", fig.align="center"}
@@ -447,7 +447,7 @@ ggplot() + geom_emoji("woman_teacher") + theme_void()
 
 To take the best action or causal conclusion based on multivariate (observational) data analysis:
 
-- Data is not just there - it has a generating process and we should care about this.
+- Data is not just there - it has a generating process and we (and our students) should care about this.
 
 - Confounding and bias can be serious issues for causal inference.
 
@@ -488,7 +488,7 @@ class: center, inverse, middle
 Influenced by [GAISE (2016)](https://www.amstat.org/asa/files/pdfs/GAISE/GaiseCollege_Full.pdf), but also [Kaplan (2018)](https://doi.org/10.1080/00031305.2017.1398107) and [Schield (2018)](http://www.statlit.org/pdf/2018-Schield-ICOTS.pdf):
 
 - [Wild and Pfannkuch (1999)](https://doi.org/10.1111/j.1751-5823.1999.tb00442.x). Statistical Thinking in Empirical Enquiry
-- [Lindeløv (2019)](https://lindeloev.github.io/tests-as-linear/). Common statistical tests are linear models (or: how to teach stats)
+- Blog [Lindeløv (2019)](https://lindeloev.github.io/tests-as-linear/). Common statistical tests are linear models (or: how to teach stats)
 - [Pruim, Kaplan and Horton (2017)](https://journal.r-project.org/archive/2017/RJ-2017-024/index.html). The mosaic Package: Helping Students to 'Think with Data' Using R
 - [Rossman and Chance (2014)](https://doi.org/10.1002/wics.1302). Using simulation‐based inference for learning introductory statistics (cf. Blog [Downey (2018)](https://allendowney.blogspot.com/2018/06/inference-in-three-hours.html)).
 
@@ -564,9 +564,9 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 ## Own Work and contact
 
 
-- [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data, Journal of Statistics Education.](https://doi.org/10.1080/10691898.2020.1752859)
+- [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data, Journal of Statistics Education.](https://doi.org/10.1080/10691898.2020.1752859) (gives more examples and details)
 
-- [Lübke, K. &  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (accepted).](https://iase-web.org/conference/roundtable20/)
+- [Lübke, K. &  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (accepted).](https://iase-web.org/conference/roundtable20/) (will give more background on the teaching aspects)
 
 <br>
 
