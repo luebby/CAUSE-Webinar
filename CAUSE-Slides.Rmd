@@ -111,7 +111,7 @@ class: center, inverse, middle
 ---
 
 
-## Some lessons you may known or learn
+## Some lessons you may already know or learn
 
 ```{r, echo= FALSE , out.width = "15%", fig.align="center"}
 ggplot() + geom_emoji("woman_teacher") + theme_void()
