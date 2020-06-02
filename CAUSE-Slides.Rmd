@@ -108,6 +108,29 @@ class: center, inverse, middle
 
 ## [EDC Oceans of Data Institute (2016):](http://oceansofdata.org/sites/oceansofdata.org/files/ODI%20Data%20Literacy%20Report_0.pdf) The data-literate individual understands,  explains, and documents the utility and  limitations of data by becoming a critical consumer of data, controlling his/her personal data trail, finding meaning in data, and taking action based on data. The data-literate individual can identify, collect, evaluate, analyze, interpret, present, and protect data.
 
+---
+
+
+## Some lessons you may known or learn
+
+```{r, echo= FALSE , out.width = "15%", fig.align="center"}
+ggplot() + geom_emoji("woman_teacher") + theme_void()
+```
+
+To take the best action or causal conclusion based on multivariate (observational) data analysis:
+
+- Data is not just there - it has a generating process and we should care about this.
+
+- Confounding and bias can be serious issues for causal inference.
+
+- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
+
+- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
+
+- Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true nevertheless*).
+
+
+`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)` For Intro Courses: Directed acyclic graphs may help to develop a framework to think about the data generating process. 
 
 ---
 
@@ -214,32 +237,11 @@ my.adj.model <- lm(price ~ bedrooms + livingArea, data = SaratogaHouses); my.adj
 
 Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead of $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.model)[2],2)`$ unadjusted for ` livingArea`). So: price falls instead of rises if I split a bedroom. (**Simpson's Paradox**)
 
-
 <br>
 
 --
 
-*Hey, can't I just use e.g. `xgboost` with all variables? (And be aware of bias-variance trade off.)*
-
-.small[BTW: Nice blog: [Landesberg, Davies and Yee (2019). *Want to make good business decisions? Learn causality*](https://multithreaded.stitchfix.com/blog/2019/12/19/good-marketing-decisions/)]
-
-
----
-
-## Fancy machine learning method
-
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("thinking") + theme_void()
-```
-
-.center[*Hey, can't I just use e.g. `xgboost` with all variables? (And be aware of bias-variance trade off.)*]
-
-.small[BTW: `mlr3`: A modern object-oriented machine learning framework in `R` ([Lang et al., 2019](https://joss.theoj.org/papers/10.21105/joss.01903))]
-
-
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("cry") + theme_void()
-```
+No problem: I just use fancy-machine-learning-method with all variables? (And be aware of bias-variance trade off.)
 
 Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
 
@@ -354,7 +356,7 @@ knitr::include_graphics(c("img/karsten.png"))
 
 class: center, inverse, middle
 
-# Some more words about data science
+# Some more words about <br> data science <br> and <br> causal inference
 
 ---
 
@@ -410,7 +412,7 @@ Other approaches to causal inference are e.g. within potential outcome framework
 | Name                       | Chain                           | Fork                           | Collider         
 | Association $X$ to $Y$     | Causal                          | Non-causal                     | None                       
 | Role of $C$                | Mediator                        | Cause                          | Effect
-| Adjusting $C$              | Blocks causal path              | Blocks non-causal path         | Opens non-causal path
+| Adjusting $C$              | Blocks causal path              | Blocks non-causal path         | Opens biasing path
 
 
 <br>
@@ -436,29 +438,6 @@ DAGE1
 DAGE2
 ```
 ]
-
----
-
-## Some lessons you may have known or just learned
-
-```{r, echo= FALSE , out.width = "15%", fig.align="center"}
-ggplot() + geom_emoji("woman_teacher") + theme_void()
-```
-
-To take the best action or causal conclusion based on multivariate (observational) data analysis:
-
-- Data is not just there - it has a generating process and we (and our students) should care about this.
-
-- Confounding and bias can be serious issues for causal inference.
-
-- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
-
-- Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
-
-- Quantitative model checks may not reveal which model is best for causal inference (*only claimed, but true nevertheless*).
-
-
-`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)`Directed acyclic graphs may help to develop a framework to think about the data generating process.
 
 
 ---
@@ -537,6 +516,7 @@ class: center, inverse, middle
 
 ## Want more?
 
+
 Some References:
 
 - [Cummiskey, K., Adams, B., Pleuss, J., Turner, D., Clark, N., & Watts, K. (2020). Causal Inference in Introductory Statistics Courses. Journal of Statistics Education](https://doi.org/10.1080/10691898.2020.1713936)
@@ -563,6 +543,7 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 ## Own Work and contact
 
+`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)` For Intro Courses: Directed acyclic graphs may help to develop a framework to think about the data generating process.
 
 - [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data, Journal of Statistics Education.](https://doi.org/10.1080/10691898.2020.1752859) (gives more examples and details)
 
