@@ -123,7 +123,7 @@ To take the best action or causal conclusion based on multivariate (observationa
 
 - Confounding and bias can be serious issues for causal inference.
 
-- Adjusting or not adjusting. Both  can be bad ideas for causal inference.
+- Adjusting or not adjusting: Both  can be bad ideas for causal inference.
 
 - Structural causal models and directed acyclic graphs can help to build a bridge between reality, theory and data.
 
@@ -241,9 +241,9 @@ Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead
 
 --
 
-No problem: I just use fancy-machine-learning-method with all variables? (And be aware of bias-variance trade off.)
+No problem, I just use fancy-machine-learning-method with all variables? (And be aware of bias-variance trade off.)
 
-Unfortunately: Depending on task **not always** and quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
+Unfortunately quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
 
 
 ---
@@ -315,7 +315,7 @@ ggformula::gf_point(kind~look, color=~dating, data = Date) %>%
 
 - Adjusted for the common effect (dating) there is an association between the independent causes good looking and kindness (**Berkson's Paradox**).
 
-- Formally: $\text{kind}{\perp\!\!\!\perp}\text{look}$ *but* $\text{kind} \not\!\perp\!\!\!\perp \text{look}|\text{dating}$
+- Formally: $\texttt{kind}{\perp\!\!\!\perp}\texttt{look}$ *but* $\texttt{kind} \not\!\perp\!\!\!\perp \texttt{look}|\texttt{dating}$
 
 ---
 
@@ -329,7 +329,7 @@ ggformula::gf_point(kind~look, data = Dated) %>%
   gf_lm() + ggthemes::scale_color_colorblind()
 ```
 
-- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated - if good looking was not the reason it must have been kindness (or luck).
+- There is also an association between the independent causes good looking and kindness if your data consists only of those who you dated - if good looking was not the reason, it must have been kindness (or luck).
 
 ---
 
