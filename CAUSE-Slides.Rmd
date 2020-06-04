@@ -563,3 +563,17 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 .center[.xlarge[Thank you!]]
 
+
+---
+
+## Seven Sparks of Causal Inference
+
+[Pearl (2019)](http://web.cs.ucla.edu/~kaoru/hpass-ucla-dec2019-bw.pdf):
+
+1. Encoding causal information in transparent and testable way
+2. Predicting the effects of actions and policies
+3. Computing counterfactuals and finding causes of effects
+4. Computing direct and indirect effects (Mediation)
+5. Integrating data from diverse sources
+6. Recovering from missing data
+7. Discovering causal relations from data
