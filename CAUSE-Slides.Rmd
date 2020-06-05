@@ -241,7 +241,7 @@ Now: $\hat{\beta}_{\text{bedrooms}}=`r round(coef(my.adj.model)[2],2)`$ (instead
 
 --
 
-No problem, I just use fancy-machine-learning-method with all variables? (And be aware of bias-variance trade off.)
+No problem, just use a fancy-machine-learning-method with all variables? (And be aware of bias-variance trade off.)
 
 Unfortunately quantitative measures like e.g. cross-validated mean squared error **not always** tell you which model is best for causal inference. 
 
