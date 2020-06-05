@@ -543,8 +543,6 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 ## Own Work and contact
 
-`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)` For Intro Courses: Directed acyclic graphs may help to develop a framework to think about the data generating process.
-
 - [Lübke, K., Gehrke, M., Horst, J. & Szepannek, G. (2020). Why We Should Teach Causal Inference: Examples in Linear Regression with Simulated Data, Journal of Statistics Education.](https://doi.org/10.1080/10691898.2020.1752859) (gives more examples and details)
 
 - [Lübke, K. &  Gehrke, M. (2020). *Now is the Time for Causal Inference in Introductory Statistics*, Proceedings IASE 2020 Roundtable New Skills in the Changing World of Statistics Education (accepted).](https://iase-web.org/conference/roundtable20/) (will give more background on the teaching aspects)
@@ -566,9 +564,17 @@ Several R packages exists, e.g. [`ggdag`](https://ggdag.netlify.com/).
 
 ---
 
-## Seven Sparks of Causal Inference
+## Recap and Outlook
 
-[Pearl (2019)](http://web.cs.ucla.edu/~kaoru/hpass-ucla-dec2019-bw.pdf):
+.center[Causal Inference: Why We Should and How We Can Teach it in Introductory Courses]
+
+`r icon::fa("hand-point-right", colour = "#00998A", size = 1.5)` Directed acyclic graphs may help to develop a framework to think about the data generating process (in a world full of multivariate observational data).
+
+<br>
+
+<br>
+
+[Pearl (2019)](http://web.cs.ucla.edu/~kaoru/hpass-ucla-dec2019-bw.pdf): Seven Sparks of Causal Inference
 
 1. Encoding causal information in transparent and testable way
 2. Predicting the effects of actions and policies
