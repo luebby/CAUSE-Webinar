@@ -272,7 +272,7 @@ $$X = U_X, \quad U_X \sim \mathcal{N}(0,\,1),$$
 $$Y = U_Y, \quad U_Y \sim \mathcal{N}(0,\,1),$$
 $$\widetilde{C} =\begin{cases} 1 & ,\, \text{if } \{ X > 1 \,\vee\, Y > 1\} \\ 0 & ,\, \text{else } \end{cases},$$
 $$C = (1-U_C) \cdot \widetilde{C} + U_C \cdot (1- \widetilde{C}), \quad U_C \sim \mathcal{B}(0.05).$$
-where $\mathcal{B}(\pi)$ stands for the Bernoulli distribution.
+where $\mathcal{N}(\mu,\,\sigma)$ stands for Normal distribution and $\mathcal{B}(\pi)$ for the Bernoulli distribution.
 
 In `R`:
 
