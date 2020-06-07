@@ -211,7 +211,7 @@ Make three bedrooms out of one and the value of my house goes up by $\approx 100
 
 .center[<iframe src="https://giphy.com/embed/2nj1XGtoznA5tb81Sl" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>]
 
-.small[[via GIPHY]("https://giphy.com/gifs/KiKAfuerdich-kika-buerger-lars-dietrich-dein-song-2nj1XGtoznA5tb81Sl)]
+.small[[via GIPHY](https://giphy.com/gifs/KiKAfuerdich-kika-buerger-lars-dietrich-dein-song-2nj1XGtoznA5tb81Sl)]
 
 ---
 
@@ -391,6 +391,8 @@ class: center, inverse, middle
 <br>
 
 Other approaches to causal inference are e.g. within potential outcome framework, instrumental variables, regression discontinuity designs, Granger, natural experiments, ...
+
+Compare also Cornfield's conditions and Bradford Hill criteria.
 
 ---
 
